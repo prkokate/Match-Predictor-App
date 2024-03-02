@@ -1,0 +1,23 @@
+.schedule-container{
+
+    /* border: 2px solid black; */
+    width: 80%;
+    padding: 2rem;
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 5rem;
+
+
+    .match-card{
+        border: 2px solid black;
+        min-height: 8rem;
+        padding: 3rem;
+        display: flex;
+        justify-content: space-between;
+
+        .predict-btn{
+            background: linear-gradient(blue,rgb(75, 105, 151));
+        }
+    }
+    
+}
