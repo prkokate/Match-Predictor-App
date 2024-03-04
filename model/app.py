@@ -115,6 +115,7 @@ def predict_match():
 @app.route('/schedule', methods = ['GET']) 
 @cross_origin()
 def get_schedule():
+    #requestBody = request.get_json()
     standings_url="https://fbref.com/en/comps/9/Premier-League-Stats"
     headers = {
     'authority': 'www.google.com',
@@ -139,6 +140,9 @@ def get_schedule():
     team_urls=[f"https://fbref.com{l}" for l in links]
     today = pd.to_datetime(datetime.now())
     end_date=pd.to_datetime(datetime.today()+timedelta(days=30))
+    # if(requestBody["start_date"]):
+    #     today=pd.to_datetime(requestBody["start_date"])
+    #     end_date=pd.to_datetime(today+timedelta(days=requestBody["interval"]))
     schmatches=[]
     for team_url in team_urls:
         data=requests.get(team_url)
@@ -147,6 +151,9 @@ def get_schedule():
         scheduled["Formation"]=scheduled["Formation"].ffill(axis=0)
         scheduled["Poss"]=scheduled["Poss"].ffill(axis=0)
         scheduled["Date"]=pd.to_datetime(scheduled["Date"])
+        #ADD TEAM  NAME HERE
+        team_name=team_url.split('/')[-1].strip("-Stats").replace("-"," ")
+        scheduled["Team"]=team_name
         scheduled=scheduled[scheduled["Date"]>=today][scheduled["Date"]<=end_date]
         scheduled.columns=[c.lower() for c in scheduled.columns]
         scheduled.iloc[:,:-1]=scheduled.iloc[:,:-1].ffill(axis = 0)

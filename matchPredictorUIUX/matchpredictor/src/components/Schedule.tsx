@@ -48,75 +48,23 @@ export default function Schedule() {
 		"venue":"Home",
 		"result":"",
 		"formation":"4-3-3"
-	},
-    {
-		"team":"Tottenham",
-		"opponent":"West Ham",
-		"date":"2022-04-23",
-		"time":"18:00",
-		"comp":"Premier League",
-		"round":"Matchweek 35",
-		"day":"Sun",
-		"venue":"Home",
-		"result":"",
-		"formation":"4-3-3"
-	},
-    {
-		"team":"Tottenham",
-		"opponent":"West Ham",
-		"date":"2022-04-23",
-		"time":"18:00",
-		"comp":"Premier League",
-		"round":"Matchweek 35",
-		"day":"Sun",
-		"venue":"Home",
-		"result":"",
-		"formation":"4-3-3"
-	},
-    {
-		"team":"Tottenham",
-		"opponent":"West Ham",
-		"date":"2022-04-23",
-		"time":"18:00",
-		"comp":"Premier League",
-		"round":"Matchweek 35",
-		"day":"Sun",
-		"venue":"Home",
-		"result":"",
-		"formation":"4-3-3"
-	},
-    {
-		"team":"Tottenham",
-		"opponent":"West Ham",
-		"date":"2022-04-23",
-		"time":"18:00",
-		"comp":"Premier League",
-		"round":"Matchweek 35",
-		"day":"Sun",
-		"venue":"Home",
-		"result":"",
-		"formation":"4-3-3"
-	},
-    {
-		"team":"Tottenham",
-		"opponent":"West Ham",
-		"date":"2022-04-23",
-		"time":"18:00",
-		"comp":"Premier League",
-		"round":"Matchweek 35",
-		"day":"Sun",
-		"venue":"Home",
-		"result":"",
-		"formation":"4-3-3"
 	}
+
 ]
+
+useEffect(()=>{
+	// Fetch data from API
+	axios.get("http://localhost:8000")
+	.then((schedule:any)=>setmatches(schedule))
+	.catch((err)=>console.log(err))
+},[])
 
 const[matches,setmatches]=useState(data);
 
   return (
     <div className='schedule-container'>
         {
-            data.map((match,i)=> { 
+            matches?matches.map((match,i)=> { 
 				
                 return <div key={i} className='match-card'>
                     <div className="match-info">
@@ -129,7 +77,7 @@ const[matches,setmatches]=useState(data);
 					</div>
                 </div>
                 }
-                )
+                ):null
         }
       
     </div>
