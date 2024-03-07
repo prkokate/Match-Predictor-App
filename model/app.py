@@ -24,17 +24,17 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 rf=RandomForestClassifier(n_estimators=50,min_samples_split=10,random_state=1)
 
-class MissingDict(dict):
-    __missing__ = lambda self, key: key
+# class MissingDict(dict):
+#     __missing__ = lambda self, key: key
 
-map_values = {"Brighton and Hove Albion": "Brighton",
-              "Manchester United": "Manchester Utd",
-              "Newcastle United": "Newcastle Utd", 
-              "Tottenham Hotspur": "Tottenham", 
-              "West Ham United": "West Ham", 
-              "Wolverhampton Wanderers": "Wolves"
-             } 
-mapping = MissingDict(**map_values)
+# map_values = {"Brighton and Hove Albion": "Brighton",
+#               "Manchester United": "Manchester Utd",
+#               "Newcastle United": "Newcastle Utd", 
+#               "Tottenham Hotspur": "Tottenham", 
+#               "West Ham United": "West Ham", 
+#               "Wolverhampton Wanderers": "Wolves"
+#              } 
+# mapping = MissingDict(**map_values)
 
 # Setup url route which will calculate 
 # total sum of array. 
@@ -53,7 +53,7 @@ def make_one_prediction(predictors,test_data):
     return combined
 
 def TrainModel(data):
-    matches=pd.read_csv('./matches.csv',index_col=0)
+    matches=pd.read_csv('f:/Machine Learning/MatchPredictor/model/matches.csv',index_col=0)
     
     matches=matches.groupby("team").get_group(data["team"])
     new_row=pd.DataFrame(data,index=[0])
@@ -89,28 +89,29 @@ def TrainModel(data):
 @cross_origin()
 def predict_match(): 
 
-	#Request Body Data:
-	data = request.get_json()
+    #Request Body Data:
+    data = request.get_json()
+    print(data)
 
-	model,test_data=TrainModel(data)
-	cols=["gf","ga","sh","sot","dist","fk","pk","pkatt"]
-	new_cols=[f"{c}_rolling" for c in cols]
-	predictors=["venue_code","opp_code","hour","day_code",'formation_code']
-
-
-	result=model.predict(test_data[predictors+new_cols])[0]
+    model,test_data=TrainModel(data)
+    cols=["gf","ga","sh","sot","dist","fk","pk","pkatt"]
+    new_cols=[f"{c}_rolling" for c in cols]
+    predictors=["venue_code","opp_code","hour","day_code",'formation_code']
 
 
-	
-	print("result=",result)
-	res=0
-
-	if(result==1):
-		res=1
+    result=model.predict(test_data[predictors+new_cols])[0]
 
 
-	# Return data in json format 
-	return json.dumps({"result":res}) 
+
+    print("result=",result)
+    res=0
+
+    if(result==1):
+        res=1
+
+
+    # Return data in json format 
+    return json.dumps({"result":res}) 
 
 @app.route('/schedule', methods = ['GET']) 
 @cross_origin()

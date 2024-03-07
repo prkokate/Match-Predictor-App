@@ -3,7 +3,15 @@ const app=express();
 
 const cors=require("cors")
 app.use(express.json())
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger-output.json');
 
+
+
+
+
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors());
 
 const MongooseConnect=require("./db")

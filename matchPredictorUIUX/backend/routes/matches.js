@@ -37,6 +37,39 @@ const fetchNewMatches=async(array,requestBody)=>{
 }
 
 
+const predictMatch=async(match)=>{
+    let response=-1;
+    var options = { 
+		method: 'POST',  
+
+		// http:flaskserverurl:port/route 
+		uri: 'http://127.0.0.1:5000/predict',
+        body:match,
+        json:true
+
+		// Automatically stringifies 
+		// the body to JSON 
+		//json: true
+	}; 
+
+	var sendrequest = await request(options) 
+
+		// The parsedBody contains the data 
+		// sent back from the Flask server 
+		.then(function (parsedBody) { 
+			//console.log(parsedBody[0]);
+            
+			
+			response=parsedBody
+		}) 
+		.catch(function (err) { 
+			console.log(err); 
+		});
+
+        return response["result"]
+}
+
+
 router.get('/schedule', async (req,res)=>{
 
     try{
@@ -61,6 +94,25 @@ router.get('/schedule', async (req,res)=>{
     }
 
 
+})
+
+
+router.post("/predictions", async(req,res)=>{
+    try {
+        var matchData=req.body
+        let curmatch=await Match.findById(matchData._id);
+        let result=curmatch["result"];
+        if(curmatch["result"]==null || curmatch["result"]==undefined){
+            result=await predictMatch(matchData);
+            await Match.updateOne({_id : curmatch._id},{$set:{ "result": result}});
+        }
+
+        res.status(200).json(result);
+
+    } catch (error) {
+        res.status(400).send('error occured while predicting: ',error)
+        console.log('error occured while predicting: ',error)
+    }
 })
 
 module.exports=router
