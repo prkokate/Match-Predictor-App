@@ -35,7 +35,7 @@ let MatchSchema=new Schema({
         required:true
     },
     result:{
-        type:String
+        type:Number
     },
     formation:{
         type:String,

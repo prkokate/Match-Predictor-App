@@ -1,0 +1,87 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Match Predictor",
+    "description": "Predict Results of Premier League matches",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/matches/schedule": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/matches/predictions": {
+      "post": {
+        "description": "Predict win(1) or loss(0) for a match",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "example": "65e54942d8bfbb65abb8d091"
+                }
+                ,
+                  "team":{
+                    "example": "Liverpool"
+                  },
+                  "opponent": {
+                    "example":"Manchester City"
+                  },
+                  "date": {
+                    "example":"2024-03-10"
+                  },
+                  "time": {
+                    "example":"15:45"
+                  },
+                  "comp": {
+                    "example":"Premier League"
+                  },
+                  "round":{
+                    "example": "Matchweek 28"
+                  },
+                  "day": {
+                    "example":"Sun"
+                  },
+                  "venue": {
+                    "example":"Home"
+                  },
+                  "result": {
+                    "example":null
+                  },
+                  "formation": {
+                    "example":"4-3-3"
+                  }
+                
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  }
+}
