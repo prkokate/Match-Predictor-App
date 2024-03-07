@@ -7,21 +7,38 @@ import PredictionContext from '../context/PredictionContext'
 type matchResult={
 	team:String,
 	opponent:String,
-	result:Number
+	result:Number,
+	date: String,
+	time: String,
+}
+
+type matchData={
+	team: String,
+	opponent: String,
+	date: String,
+	time: String,
+	comp: String,
+	round: String,
+	day: String,
+	venue: String,
+	result: Number,
+	formation: String
 }
 export default function Schedule() {
 
     const navigate= useNavigate();
 	const {setMatchResult}:any=useContext(PredictionContext);
 	const predict=(match:any)=>{
-		axios.post('http://127.0.0.1:5000/predict',match
+		axios.post('http://localhost:8000/api/matches/predictions',match
 	).then((result:any)=>{
-	  console.log(result.data["result"])
+	  console.log(result.data)
 
 	  let matchresult:matchResult={
 		"team":match.team,
 		"opponent":match.opponent,
-		"result":result.data["result"]
+		"result":result.data,
+		"date": match.date,
+	   "time": match.time,
 	}
 
 	  setMatchResult(matchresult)
@@ -36,41 +53,64 @@ export default function Schedule() {
 	})
 	}
 
-  const data=[
-    {
-		"team":"Tottenham",
-		"opponent":"West Ham",
-		"date":"2022-04-23",
-		"time":"18:00",
-		"comp":"Premier League",
-		"round":"Matchweek 35",
-		"day":"Sun",
-		"venue":"Home",
-		"result":"",
-		"formation":"4-3-3"
+ 
+
+const handleChange=(e:any)=>{
+	setsearch(e.target.value);
+	let temp=matches.filter((match:matchData)=>{				
+		return e.target.value!==""?match.team.toLowerCase().includes(e.target.value.toLocaleLowerCase()):match
+	})
+
+	if(e.target.value!==""){
+		setsearchcnt(temp.length)
+	}
+	else{
+		setsearchcnt(0);
 	}
 
-]
+}
 
 useEffect(()=>{
 	// Fetch data from API
-	axios.get("http://localhost:8000")
-	.then((schedule:any)=>setmatches(schedule))
+	axios.get("http://localhost:8000/api/matches/schedule")
+	.then((schedule:any)=>setmatches(schedule.data))
 	.catch((err)=>console.log(err))
+
 },[])
 
-const[matches,setmatches]=useState(data);
+const[matches,setmatches]=useState([]);
+const [search,setsearch]=useState("");
+const [searchcnt,setsearchcnt]=useState(0);
 
   return (
     <div className='schedule-container'>
+		<div className="search-div">
+		<h3 className='schedule-heading' >Premier League Predictor</h3>
+		
+		<input value={search} onChange={handleChange} className='search-bar' placeholder='Search by team name, round' type="text" />
+		{searchcnt!==0?<p className='total-results' >Total results: {searchcnt}</p>:null}
+		</div>
         {
-            matches?matches.map((match,i)=> { 
+			searchcnt===0 && search!=="" ?( <h2 className='no-results' > No results found for '{search}'</h2> ):
+            matches?matches.filter((match:matchData)=>{
+				
+				return search!==""?match.team.toLowerCase().includes(search.toLocaleLowerCase()):match
+			})
+			.map((match:matchData,i)=> { 
 				
                 return <div key={i} className='match-card'>
                     <div className="match-info">
 						<h3>{match.team} Vs {match.opponent}</h3>
-						<p>{match.date} @ {match.time}</p>
+						<p>{match.date.slice(0,10)} @ {match.time}</p>
 						<p>venue: {match.venue==="Home"?match.team:match.opponent}  </p>
+					</div>
+					<div className="logo-round-div">
+						<div className="logo-div">
+						<img className='logo' src="https://logos-world.net/wp-content/uploads/2020/06/Liverpool-Logo.png" alt="" />
+						VS
+						<img className='logo' src="https://logos-world.net/wp-content/uploads/2020/06/Liverpool-Logo.png" alt="" />
+						</div>
+						{match.round}
 					</div>
 					<div className="predict-div">
 						<button key={i} onClick={()=>predict(match)} className='predict-btn' >See prediction</button>
