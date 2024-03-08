@@ -8,7 +8,7 @@ const PredictionState=(Props:any)=>{
     if(match){
      match=JSON.parse(match)
     }
-    const [matchResult,setMatchResult]=useState(match)
+    const [matchResult,setMatchResult]=useState(match?match:{team:"",opponent:"",result:-1,date: "",time: "",})
     return (
         <PredictionContext.Provider value={{matchResult,setMatchResult}} >
               {Props.children}

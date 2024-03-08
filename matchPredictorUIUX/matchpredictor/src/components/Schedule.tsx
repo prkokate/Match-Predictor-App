@@ -9,7 +9,9 @@ type matchResult={
 	opponent:String,
 	result:Number,
 	date: String,
-	time: String,
+	round:String,
+	day:String,
+	venue:String
 }
 
 type matchData={
@@ -38,7 +40,9 @@ export default function Schedule() {
 		"opponent":match.opponent,
 		"result":result.data,
 		"date": match.date,
-	   "time": match.time,
+	   "day":match.day,
+	   "round":match.round,
+	   "venue":match.venue
 	}
 
 	  setMatchResult(matchresult)
