@@ -8,6 +8,8 @@
     gap: 2rem;
     margin-top: 5rem;
 
+   
+
     .search-div{
         display: grid;
         place-items: center;
@@ -16,20 +18,43 @@
             font-size: 4rem;
             padding: 0;
             margin: 0;
+            color: #5f2775;
         }
-        .search-bar{
-            width: 30%;
-            padding: 0.8rem;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            font-size: 1.5rem;
+        .input-div{
+            display: flex;
+            gap: 2rem;
+            align-items: center;
 
-            border: none;
-            border-radius: 5rem;
-            background-color: rgb(198, 198, 216);
-        }
-        .search-bar::placeholder{
-            font-size: 1.1rem;
+            .toggle-month{
+                background: linear-gradient(#5f2775,#371146);
+                color: aliceblue;
+                padding: 0.3rem;
+                min-height: 2rem;
+                width: 26%;
+                font-size: 75%;
+                font-weight: bold;
+            }
+            .toggle-month:disabled{
+                background: linear-gradient(#cd8ee6,#9d43c0);
+                opacity: 0.4;
+                cursor: not-allowed;
+                
+            }
+
+            .search-bar{
+                width: 80%;
+                padding: 0.8rem;
+                padding-left: 2rem;
+                padding-right: 2rem;
+                font-size: 1.5rem;
+    
+                border: none;
+                border-radius: 5rem;
+                background-color: rgb(198, 198, 216);
+            }
+            .search-bar::placeholder{
+                font-size: 1.1rem;
+            }
         }
 
         .total-results{
@@ -71,6 +96,7 @@
 
                 .logo{
                     width: 5rem;
+                    aspect-ratio: 8/5;
                 }
             }
         }

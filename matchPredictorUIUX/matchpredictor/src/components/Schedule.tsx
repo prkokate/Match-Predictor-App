@@ -74,31 +74,39 @@ const handleChange=(e:any)=>{
 
 }
 
+
+
 useEffect(()=>{
 	// Fetch data from API
 	axios.get("http://localhost:8000/api/matches/schedule")
 	.then((schedule:any)=>setmatches(schedule.data))
 	.catch((err)=>console.log(err))
-
+	
 },[])
 
 const[matches,setmatches]=useState([]);
 const [search,setsearch]=useState("");
 const [searchcnt,setsearchcnt]=useState(0);
+const [curmonth,setmonth]=useState(new Date().getMonth());
 
   return (
     <div className='schedule-container'>
 		<div className="search-div">
 		<h3 className='schedule-heading' >Premier League Predictor</h3>
 		
+		<div className="input-div">
+		<button onClick={()=>{setmonth(curmonth-1)}} disabled={curmonth===new Date().getMonth()} className='toggle-month' >&larr; Prev month</button>
 		<input value={search} onChange={handleChange} className='search-bar' placeholder='Search by team name, round' type="text" />
+		<button onClick={()=>{setmonth(curmonth+1)}} disabled={curmonth===new Date().getMonth()+1} className='toggle-month' >Next month &rarr;</button>
+		</div>
 		{searchcnt!==0?<p className='total-results' >Total results: {searchcnt}</p>:null}
 		</div>
         {
 			searchcnt===0 && search!=="" ?( <h2 className='no-results' > No results found for '{search}'</h2> ):
             matches?matches.filter((match:matchData)=>{
-				
-				return search!==""?match.team.toLowerCase().includes(search.toLocaleLowerCase()):match
+				// console.log("-"+((curmonth.getMonth()+1)<"10"?"0":"") +String(curmonth.getMonth()+1)+"-")
+				return search!==""?match.team.toLowerCase().includes(search.toLocaleLowerCase()):
+				match.date.slice(0,10).includes("-"+(curmonth+1)<"10"?"0"+String(curmonth+1)+"-":+String(curmonth+1)+"-")
 			})
 			.map((match:matchData,i)=> { 
 				
