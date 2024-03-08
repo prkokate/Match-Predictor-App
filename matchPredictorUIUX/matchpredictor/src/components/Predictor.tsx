@@ -43,7 +43,7 @@ export default function Predictor() {
         </div>
 
        { matchResult.result?<p className="description"> {matchResult.team} has stronger chances of winning over {matchResult.opponent}!</p>
-        :<p className="description"> {matchResult.team} has stronger chances of winning over {matchResult.opponent}!</p>}
+        :<p className="description"> {matchResult.opponent} has stronger chances of winning over {matchResult.team}!</p>}
         
       </div>
     </div>

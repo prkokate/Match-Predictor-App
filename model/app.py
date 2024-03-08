@@ -91,7 +91,7 @@ def predict_match():
 
     #Request Body Data:
     data = request.get_json()
-    print(data)
+    
 
     model,test_data=TrainModel(data)
     cols=["gf","ga","sh","sot","dist","fk","pk","pkatt"]

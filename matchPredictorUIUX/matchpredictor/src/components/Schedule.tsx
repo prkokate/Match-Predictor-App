@@ -8,7 +8,7 @@ type matchResult={
 	team:String,
 	opponent:String,
 	result:Number,
-	date: String,
+	date: Date,
 	round:String,
 	day:String,
 	venue:String
@@ -17,7 +17,7 @@ type matchResult={
 type matchData={
 	team: String,
 	opponent: String,
-	date: String,
+	date: Date,
 	time: String,
 	comp: String,
 	round: String,
@@ -31,6 +31,7 @@ export default function Schedule() {
     const navigate= useNavigate();
 	const {setMatchResult}:any=useContext(PredictionContext);
 	const predict=(match:any)=>{
+		match.date=String(match.date).slice(0,10);
 		axios.post('http://localhost:8000/api/matches/predictions',match
 	).then((result:any)=>{
 	  console.log(result.data)
@@ -75,19 +76,29 @@ const handleChange=(e:any)=>{
 }
 
 
+const [updateFlag,setUpdateFlag]:any=useState(localStorage.getItem("curDate"));
+const[matches,setmatches]=useState([]);
+const [search,setsearch]=useState("");
+const [searchcnt,setsearchcnt]=useState(0);
+const [curmonth,setmonth]=useState(new Date().getMonth());
 
 useEffect(()=>{
+	if(updateFlag!==String(new Date().getDate())){
+
+		axios.delete("http://localhost:8000/api/matches/update-schedule")
+		.then(()=>console.log("Schedule updated!"))
+		.catch((err)=>console.log(err))
+
+		setUpdateFlag(new Date().getDate());
+		localStorage.setItem("curDate", String(new Date().getDate()));
+	}
+
 	// Fetch data from API
 	axios.get("http://localhost:8000/api/matches/schedule")
 	.then((schedule:any)=>setmatches(schedule.data))
 	.catch((err)=>console.log(err))
 	
 },[])
-
-const[matches,setmatches]=useState([]);
-const [search,setsearch]=useState("");
-const [searchcnt,setsearchcnt]=useState(0);
-const [curmonth,setmonth]=useState(new Date().getMonth());
 
   return (
     <div className='schedule-container'>
@@ -104,16 +115,16 @@ const [curmonth,setmonth]=useState(new Date().getMonth());
         {
 			searchcnt===0 && search!=="" ?( <h2 className='no-results' > No results found for '{search}'</h2> ):
             matches?matches.filter((match:matchData)=>{
-				// console.log("-"+((curmonth.getMonth()+1)<"10"?"0":"") +String(curmonth.getMonth()+1)+"-")
+				//console.log(new Date(match.date).getMonth())
 				return search!==""?match.team.toLowerCase().includes(search.toLocaleLowerCase()):
-				match.date.slice(0,10).includes("-"+(curmonth+1)<"10"?"0"+String(curmonth+1)+"-":+String(curmonth+1)+"-")
+				new Date(match.date).getMonth()===curmonth
 			})
 			.map((match:matchData,i)=> { 
 				
                 return <div key={i} className='match-card'>
                     <div className="match-info">
 						<h3>{match.team} Vs {match.opponent}</h3>
-						<p>{match.date.slice(0,10)} @ {match.time}</p>
+						<p>{String(match.date).slice(0,10)} @ {match.time}</p>
 						<p>venue: {match.venue==="Home"?match.team:match.opponent}  </p>
 					</div>
 					<div className="logo-round-div">

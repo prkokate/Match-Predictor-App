@@ -74,7 +74,7 @@ router.get('/schedule', async (req,res)=>{
 
     try{
 
-        let prevSchedule=await Match.find()
+        let prevSchedule=await Match.find().sort({'date': 1})
         //.sort({'date': -1}) //get all matches and sort by date in desc
      
         if(!prevSchedule || prevSchedule.length==0){
@@ -110,8 +110,23 @@ router.post("/predictions", async(req,res)=>{
         res.status(200).json(result);
 
     } catch (error) {
-        res.status(400).send('error occured while predicting: ',error)
-        console.log('error occured while predicting: ',error)
+        res.status(400).send('error occured while predicting: '+error)
+        console.log('error occured while predicting: '+error)
+    }
+})
+
+router.delete("/update-schedule",async(req,res)=>{
+    try{
+        
+        var dates=new Date().toISOString()
+        var response=await Match.deleteMany({"date":{$lt:dates}})
+
+          res.status(200).send("schedule updated!");
+    }
+    catch(err){
+        console.log(err);
+        return res.status(400).send(err);
+
     }
 })
 
