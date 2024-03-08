@@ -8,12 +8,12 @@ export default function Navbar() {
 
   return (
     <nav className='main-nav-div' >
-      <div onClick={()=>{setmenu(!menu)}} className="nav-logo">
+      <div onMouseEnter={()=>{setmenu(true)}} onMouseLeave={()=>setmenu(false)} className="nav-logo">
         <h3>Premier Predictor</h3>
       </div>
 
       
-      <div style={menu?{width:"25rem"}:{}} className="nav-links">
+      <div onMouseEnter={()=>{setmenu(true)}} onMouseLeave={()=>setmenu(false)} style={menu?{width:"25rem"}:{}} className="nav-links">
         <ul className="nav-links-ul">
           <Link to="/"> <li style={menu?{width:"100%"}:{}} className="nav-links-list">Home</li></Link>
           <Link to="/about-us"> <li style={menu?{width:"100%"}:{}} className="nav-links-list">About us</li></Link>
