@@ -82,6 +82,8 @@ const [search,setsearch]=useState("");
 const [searchcnt,setsearchcnt]=useState(0);
 const [curmonth,setmonth]=useState(new Date().getMonth());
 
+const month=["Jan","Feb","March","April","May","June","July","Aug","Sept","Oct","Nov","Dec"]
+
 useEffect(()=>{
 	if(updateFlag!==String(new Date().getDate())){
 
@@ -97,6 +99,8 @@ useEffect(()=>{
 	axios.get("http://localhost:8000/api/matches/schedule")
 	.then((schedule:any)=>setmatches(schedule.data))
 	.catch((err)=>console.log(err))
+
+	localStorage.removeItem("match-prediction");
 	
 },[])
 
@@ -106,9 +110,9 @@ useEffect(()=>{
 		<h3 className='schedule-heading' >Premier League Predictor</h3>
 		
 		<div className="input-div">
-		<button onClick={()=>{setmonth(curmonth-1)}} disabled={curmonth===new Date().getMonth()} className='toggle-month' >&larr; Prev month</button>
+		<button onClick={()=>{setmonth(curmonth-1)}} disabled={curmonth===new Date().getMonth()} className='toggle-month' >&larr; {month[curmonth-1]}</button>
 		<input value={search} onChange={handleChange} className='search-bar' placeholder='Search by team name, round' type="text" />
-		<button onClick={()=>{setmonth(curmonth+1)}} disabled={curmonth===new Date().getMonth()+1} className='toggle-month' >Next month &rarr;</button>
+		<button onClick={()=>{setmonth(curmonth+1)}} disabled={curmonth===new Date().getMonth()+1} className='toggle-month' > {month[curmonth+1]}&rarr; </button>
 		</div>
 		{searchcnt!==0?<p className='total-results' >Total results: {searchcnt}</p>:null}
 		</div>
@@ -116,7 +120,9 @@ useEffect(()=>{
 			searchcnt===0 && search!=="" ?( <h2 className='no-results' > No results found for '{search}'</h2> ):
             matches?matches.filter((match:matchData)=>{
 				//console.log(new Date(match.date).getMonth())
-				return search!==""?match.team.toLowerCase().includes(search.toLocaleLowerCase()):
+				return search!==""?match.team.toLowerCase().includes(search.toLocaleLowerCase()) 
+				|| match.opponent.toLowerCase().includes(search.toLocaleLowerCase())
+				 :
 				new Date(match.date).getMonth()===curmonth
 			})
 			.map((match:matchData,i)=> { 
@@ -129,9 +135,9 @@ useEffect(()=>{
 					</div>
 					<div className="logo-round-div">
 						<div className="logo-div">
-						<img className='logo' src="https://logos-world.net/wp-content/uploads/2020/06/Liverpool-Logo.png" alt="" />
-						VS
-						<img className='logo' src="https://logos-world.net/wp-content/uploads/2020/06/Liverpool-Logo.png" alt="" />
+						<img className='logo' src={`/assets/teamLogos/${match.team.replace(" ","-")}.png`} alt="" />
+						<p className='versus' >VS</p> 
+						<img className='logo' src={`/assets/teamLogos/${match.opponent.replace(" ","-")}.png`} alt="" />
 						</div>
 						{match.round}
 					</div>

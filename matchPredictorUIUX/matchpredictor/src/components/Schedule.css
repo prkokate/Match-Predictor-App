@@ -93,9 +93,13 @@
             /* border: 2px solid white; */
             .logo-div{
                 display: flex;
-
+                justify-content: center;
+                
+                .versus{
+                    margin: auto;
+                }
                 .logo{
-                    width: 5rem;
+                    width: 6.5rem;
                     aspect-ratio: 8/5;
                 }
             }

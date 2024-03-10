@@ -26,24 +26,26 @@ export default function Predictor() {
         </div>
 
         <div className="prediction-stats">
-        <div style={{color:matchResult.result?"green":"red"}} className="team-data-div">
-            <div style={{borderColor:matchResult.result?"green":"red"}} className="result-border team-result">
-            <img className='logo-img' src="https://logos-world.net/wp-content/uploads/2020/06/Liverpool-Logo.png" alt="" />
+        <div style={{color:matchResult.result==2?"green":matchResult.result==1?"red":"yellow"}} className="team-data-div">
+            <div style={{borderColor:matchResult.result==2?"green":matchResult.result==1?"red":"yellow"}} className="result-border team-result">
+            <img className='logo-img' src={`/assets/teamLogos/${matchResult.team.replace(" ","-")}.png`} alt="" />
             </div>
             <h3  className='team-name' >{matchResult.team}</h3>
             <p className='home-away' >({matchResult.venue})</p>
         </div>
-        <div style={{color:matchResult.result?"red":"green"}} className="opponent-data-div">
-            <div style={{borderColor:matchResult.result?"red":"green"}} className="result-border opponent-result">
-                <img className='logo-img' src="https://logos-world.net/wp-content/uploads/2020/06/Liverpool-Logo.png" alt="" />
+        <div style={{color:matchResult.result==2?"red":matchResult.result==1?"green":"yellow"}} className="opponent-data-div">
+            <div style={{borderColor:matchResult.result==2?"red":matchResult.result==1?"green":"yellow"}} className="result-border opponent-result">
+                <img className='logo-img' src={`/assets/teamLogos/${matchResult.opponent.replace(" ","-")}.png`} alt="" />
             </div>
             <h3  className='team-name' >{matchResult.opponent}</h3>
             <p className='home-away' >({matchResult.venue==="Home"?"Away":"Home"})</p>
         </div>
         </div>
 
-       { matchResult.result?<p className="description"> {matchResult.team} has stronger chances of winning over {matchResult.opponent}!</p>
-        :<p className="description"> {matchResult.opponent} has stronger chances of winning over {matchResult.team}!</p>}
+       { matchResult.result==2?<p className="description"> {matchResult.team} has stronger chances of winning over {matchResult.opponent}!</p>
+        :matchResult.result==1?<p className="description"> {matchResult.opponent} has stronger chances of winning over {matchResult.team}!</p>
+        :<p className="description"> Stats show strong possibility of a Draw!</p>
+      }
         
       </div>
     </div>
