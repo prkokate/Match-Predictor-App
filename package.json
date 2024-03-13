@@ -1,0 +1,7 @@
+{
+    "scripts":{
+        "frontend":"cd matchPredictorUIUX && cd matchpredictor && npm run dev",
+        "backend":"cd matchPredictorUIUX && cd backend && npx nodemon index.js",
+        "pyServer":"python -u model/app.py"
+    }
+}

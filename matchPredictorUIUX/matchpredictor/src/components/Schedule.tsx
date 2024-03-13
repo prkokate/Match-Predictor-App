@@ -3,6 +3,7 @@ import './Schedule.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import PredictionContext from '../context/PredictionContext'
+import Spinner from './Spinner'
 
 type matchResult={
 	team:String,
@@ -28,10 +29,19 @@ type matchData={
 }
 export default function Schedule() {
 
+const [updateFlag,setUpdateFlag]:any=useState(localStorage.getItem("curDate"));
+const[matches,setmatches]=useState([]);
+const [search,setsearch]=useState("");
+const [searchcnt,setsearchcnt]=useState(0);
+const [curmonth,setmonth]=useState(new Date().getMonth());
+const [loader,setloader]=useState(true);
+
     const navigate= useNavigate();
+;
 	const {setMatchResult}:any=useContext(PredictionContext);
 	const predict=(match:any)=>{
 		match.date=String(match.date).slice(0,10);
+		setloader(true)
 		axios.post('http://localhost:8000/api/matches/predictions',match
 	).then((result:any)=>{
 	  console.log(result.data)
@@ -51,6 +61,7 @@ export default function Schedule() {
 	  var matchres=JSON.stringify(matchresult)
 
 	localStorage.setItem("match-prediction",matchres);
+	setloader(false);
 
 	  navigate("/Prediction")
 	}).catch((err)=>{
@@ -76,15 +87,14 @@ const handleChange=(e:any)=>{
 }
 
 
-const [updateFlag,setUpdateFlag]:any=useState(localStorage.getItem("curDate"));
-const[matches,setmatches]=useState([]);
-const [search,setsearch]=useState("");
-const [searchcnt,setsearchcnt]=useState(0);
-const [curmonth,setmonth]=useState(new Date().getMonth());
+
 
 const month=["Jan","Feb","March","April","May","June","July","Aug","Sept","Oct","Nov","Dec"]
 
 useEffect(()=>{
+
+	setloader(true);
+
 	if(updateFlag!==String(new Date().getDate())){
 
 		axios.delete("http://localhost:8000/api/matches/update-schedule")
@@ -97,10 +107,15 @@ useEffect(()=>{
 
 	// Fetch data from API
 	axios.get("http://localhost:8000/api/matches/schedule")
-	.then((schedule:any)=>setmatches(schedule.data))
+	.then((schedule:any)=>{
+		setmatches(schedule.data)
+		setloader(false);
+	})
 	.catch((err)=>console.log(err))
 
 	localStorage.removeItem("match-prediction");
+
+	
 	
 },[])
 
@@ -116,8 +131,10 @@ useEffect(()=>{
 		</div>
 		{searchcnt!==0?<p className='total-results' >Total results: {searchcnt}</p>:null}
 		</div>
+
+		<Spinner loader={loader} />
         {
-			searchcnt===0 && search!=="" ?( <h2 className='no-results' > No results found for '{search}'</h2> ):
+			searchcnt===0 && search!=="" && !loader ?( <h2 className='no-results' > No results found for '{search}'</h2> ):
             matches?matches.filter((match:matchData)=>{
 				//console.log(new Date(match.date).getMonth())
 				return search!==""?match.team.toLowerCase().includes(search.toLocaleLowerCase()) 

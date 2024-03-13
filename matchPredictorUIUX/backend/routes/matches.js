@@ -119,6 +119,7 @@ router.delete("/update-schedule",async(req,res)=>{
     try{
         
         var dates=new Date().toISOString()
+        dates=dates.setDate(dates.getDate()-1)
         var response=await Match.deleteMany({"date":{$lt:dates}})
 
           res.status(200).send("schedule updated!");
