@@ -1,4 +1,9 @@
-
+.schedule-main{
+    width: 100%;
+    padding: 0;
+    display: grid;
+    place-items: center;
+}
 .schedule-container{
 
     /* border: 2px solid black; */
