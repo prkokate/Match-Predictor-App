@@ -42,7 +42,7 @@ const [loader,setloader]=useState(true);
 	const predict=(match:any)=>{
 		match.date=String(match.date).slice(0,10);
 		setloader(true)
-		axios.post('http://localhost:8000/api/matches/predictions',match
+		axios.post('https://match-predictor-app-server.vercel.app/api/matches/predictions',match
 	).then((result:any)=>{
 	  console.log(result.data)
 
@@ -97,7 +97,7 @@ useEffect(()=>{
 
 	if(updateFlag!==String(new Date().getDate())){
 
-		axios.delete("http://localhost:8000/api/matches/update-schedule")
+		axios.delete("https://match-predictor-app-server.vercel.app/api/matches/update-schedule")
 		.then(()=>console.log("Schedule updated!"))
 		.catch((err)=>console.log(err))
 
@@ -106,7 +106,7 @@ useEffect(()=>{
 	}
 
 	// Fetch data from API
-	axios.get("http://localhost:8000/api/matches/schedule")
+	axios.get("https://match-predictor-app-server.vercel.app/api/matches/schedule")
 	.then((schedule:any)=>{
 		setmatches(schedule.data)
 		setloader(false);
