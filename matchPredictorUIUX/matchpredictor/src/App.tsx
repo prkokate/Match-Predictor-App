@@ -1,11 +1,9 @@
-import axios from 'axios'
 import './App.css'
 import { BrowserRouter as Router,
 Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Schedule from './components/Schedule'
 import Predictor from './components/Predictor'
-import { useState } from 'react'
 import PredictionState from './context/PredictionState'
 
 function App() {

@@ -60,7 +60,7 @@ def make_one_prediction(predictors,test_data):
     return combined
 
 def TrainModel(data):
-    matches=pd.read_csv('f:/Machine Learning/MatchPredictor/model/matches.csv',index_col=0)
+    matches=pd.read_csv('matches.csv',index_col=0)
     
     matches=matches.groupby("team").get_group(data["team"])
     matches["target"]=matches["result"].astype("category").cat.codes
@@ -98,6 +98,11 @@ def TrainModel(data):
     rf.fit(train[predictors+new_cols],train['target'])
     return rf, matches_rolling.loc[matches_rolling.shape[0]-1:]
 
+
+@app.route('/', methods = ['GET']) 
+@cross_origin()
+def started_server():
+    return "Server Started!" 
 
 @app.route('/predict', methods = ['POST']) 
 @cross_origin()
@@ -206,5 +211,5 @@ def get_schedule():
     return json.dumps(response)
 
 
-if __name__ == "__main__": 
-	app.run(port=5000)
+# if __name__ == "__main__": 
+# 	app.run(port=5000)

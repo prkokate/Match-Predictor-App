@@ -1,16 +1,16 @@
-import React, { useContext, useEffect } from 'react'
+import { useContext} from 'react'
 import './Predictor.css'
 import PredictionContext from '../context/PredictionContext'
 
-type matchResult={
-	team:String,
-	opponent:String,
-	result:Number,
-	date: String,
-  round:String,
-	day:String,
-	venue:String
-}
+// type matchResult={
+// 	team:String,
+// 	opponent:String,
+// 	result:Number,
+// 	date: String,
+//   round:String,
+// 	day:String,
+// 	venue:String
+// }
 
 
 export default function Predictor() {

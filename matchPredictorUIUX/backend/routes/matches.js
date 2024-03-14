@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express=require("express")
 const router=express.Router();
 let Match=require('../models/Match')
@@ -10,7 +11,7 @@ const fetchNewMatches=async(array,requestBody)=>{
 		method: 'GET',  
 
 		// http:flaskserverurl:port/route 
-		uri: 'http://127.0.0.1:5000/schedule',
+		uri: `${process.env.PythonURL}/schedule`,
         body:requestBody,
         json:true
 
@@ -43,7 +44,7 @@ const predictMatch=async(match)=>{
 		method: 'POST',  
 
 		// http:flaskserverurl:port/route 
-		uri: 'http://127.0.0.1:5000/predict',
+		uri: `${process.env.PythonURL}/predict`,
         body:match,
         json:true
 
@@ -118,8 +119,9 @@ router.post("/predictions", async(req,res)=>{
 router.delete("/update-schedule",async(req,res)=>{
     try{
         
-        var dates=new Date().toISOString()
-        dates=dates.setDate(dates.getDate()-1)
+        var dates=new Date()
+        dates.setDate(dates.getDate()-1)
+        dates=dates.toISOString()
         var response=await Match.deleteMany({"date":{$lt:dates}})
 
           res.status(200).send("schedule updated!");

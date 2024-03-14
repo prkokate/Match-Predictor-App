@@ -1,3 +1,4 @@
+
 .schedule-container{
 
     /* border: 2px solid black; */
@@ -5,12 +6,14 @@
     width: 65%;
     padding: 2rem;
     display: grid;
+    place-items:center;
     gap: 2rem;
-    margin-top: 5rem;
+    margin-top: 6rem;
 
    
 
     .search-div{
+        width: 100%;
         display: grid;
         place-items: center;
         gap: 2rem;
@@ -21,6 +24,7 @@
             color: #5f2775;
         }
         .input-div{
+            width: 100%;
             display: flex;
             gap: 2rem;
             align-items: center;
@@ -66,6 +70,7 @@
     }
 
     .match-card{
+        width: 100%;
         box-shadow: 0 4px 8px 0 rgba(150, 152, 173, 0.3), 0 6px 20px 0 rgba(72, 74, 95, 0.25);
         /* border: 2px solid rgb(48, 49, 63); */
         color:rgb(112, 114, 138);
@@ -75,6 +80,17 @@
         display: flex;
         justify-content: space-between;
         border-radius: 5rem;
+
+        .match-info{
+            display: grid;
+            font-size: 1.2rem;
+            .team-names-div{
+                display: flex;
+                gap: 20%;
+                align-items: center;
+
+            }
+        }
 
         .predict-div{
             display: grid;
@@ -110,5 +126,84 @@
         width: 100%;
         text-align: center;
     }
+
+@media screen and (max-width:789px) {
+    width: 100%;
+    place-content:center;
+    padding: 0;
+    /* background-color: wheat; */
+ 
+    .search-div{
+        margin: 0;
+       
+        
+        .schedule-heading{
+            padding: 0;
+            font-size: 2rem;
+        }
+        .input-div{
+            width: 95%;
+            gap: 1rem;;
+            
+           
+        }
+    }
+
+    .match-card{
+        width: 95%;
+        padding: 0;
+        height: 20rem;
+        border-radius: 3rem;
+        
+
+        .match-info{
+            display: grid;
+            padding: 0.4rem;
+            place-items: center;
+            font-size: 1rem;
+            .team-names-div{
+
+                display: grid;
+                text-align: center;
+                h3{
+                    padding: 0;
+                    margin: 0;
+                }
+                
+            }
+        }
+
+        .logo-round-div{
+            text-align: center;
+            display: grid;
+            place-items:  center;
+            gap: 0rem;
+            font-size: 1rem;
+            padding: 0;
+            /* border: 2px solid white; */
+            .logo-div{
+              display: grid;
+                .versus{
+                    font-size: 1rem;
+                    margin: auto;
+                }
+                .logo{
+                    padding: 0;
+                    width: 6rem;
+                }
+            }
+        }
+
+        .predict-div{
+            padding: 0.6rem;
+            .predict-btn{
+                width: 4rem;
+                height: 6rem;
+                text-align: center;
+                font-size: 0.6rem;
+            }
+        }
+    }
+}
     
 }

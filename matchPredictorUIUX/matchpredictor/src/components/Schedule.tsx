@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './Schedule.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -120,6 +120,7 @@ useEffect(()=>{
 },[])
 
   return (
+	<div className="schedule-main">
     <div className='schedule-container'>
 		<div className="search-div">
 		<h3 className='schedule-heading' >Premier League Predictor</h3>
@@ -146,7 +147,11 @@ useEffect(()=>{
 				
                 return <div key={i} className='match-card'>
                     <div className="match-info">
-						<h3>{match.team} Vs {match.opponent}</h3>
+						<div className="team-names-div">
+							<h3>{match.team}</h3>
+							Vs
+							<h3> {match.opponent}</h3>
+						</div>
 						<p>{String(match.date).slice(0,10)} @ {match.time}</p>
 						<p>venue: {match.venue==="Home"?match.team:match.opponent}  </p>
 					</div>
@@ -167,5 +172,6 @@ useEffect(()=>{
         }
       
     </div>
+	</div>
   )
 }
