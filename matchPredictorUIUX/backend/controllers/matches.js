@@ -35,7 +35,7 @@ async function fetchNewMatches(array,requestBody){
         return resposeAr
 }
 
-async function getSchedule (req,res){
+async function getSchedule (req,res,fetchNewMatches){
 
     try{
 
@@ -43,7 +43,7 @@ async function getSchedule (req,res){
         //.sort({'date': -1}) //get all matches and sort by date in desc
      
         if(!prevSchedule || prevSchedule.length==0){
-            prevSchedule=await fetchNewMatches(prevSchedule,{})
+            prevSchedule=await fetchNewMatches(prevSchedule,req.body)
            //console.log(prevSchedule[0])
 
             prevSchedule.map(async(match,i)=>{
@@ -53,21 +53,59 @@ async function getSchedule (req,res){
 
         res.status(200)
         res.json(prevSchedule)
+
+        return;
     }
     catch(err){
         console.log("Error occurred while fetching new matches: "+err);
         res.status(500);
         res.json({"error": err})
     }
+}
+
+async function updateSchedule (req,res){
+    try{
+        
+        var dates=new Date()
+        dates.setDate(dates.getDate()-1)
+        dates=dates.toISOString()
+        var response=await Match.deleteMany({"date":{$lt:dates}})
+
+          res.status(200)
+          res.json({message:"schedule updated!"});
+    }
+    catch(err){
+        console.log(err);
+        res.json(err);
+        return res.status(400)
+
+    }
+}
 
 
+async function predictMatch (req,res,predictMatchFromApi){
+    try {
+        var matchData=req.body
+        let curmatch=await Match.findById(matchData._id);
+        //console.log(curmatch)
+        let result=curmatch["result"];
+        if(curmatch["result"]==null || curmatch["result"]==undefined){
+            result=await predictMatchFromApi(matchData);
+           // console.log(result);
+            await Match.updateOne({_id : curmatch._id},{$set:{ "result": result}});
+        }
+
+        res.status(200)
+        res.json(result);
+
+    } catch (error) {
+        res.status(400)
+        res.json('error occured while predicting: '+error)
+        console.log('error occured while predicting: '+error)
+    }
 }
 
 
 
 
-
-module.exports={
-    getSchedule,
-    fetchNewMatches
-};
+module.exports={getSchedule,updateSchedule,predictMatch};
