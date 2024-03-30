@@ -17,6 +17,7 @@ app.use(cors({
   methods:["POST","GET","PUT","DELETE"],
   credentials:true
 }));
+// app.use(cors());
 
 const MongooseConnect=require("./db")
 MongooseConnect();

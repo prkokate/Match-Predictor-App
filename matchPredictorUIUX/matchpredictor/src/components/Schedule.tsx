@@ -42,6 +42,7 @@ const [loader,setloader]=useState(true);
 	const predict=(match:any)=>{
 		match.date=String(match.date).slice(0,10);
 		setloader(true)
+		//https://match-predictor-app-server.vercel.app/
 		axios.post('https://match-predictor-app-server.vercel.app/api/matches/predictions',match
 	).then((result:any)=>{
 	  console.log(result.data)
@@ -96,7 +97,8 @@ useEffect(()=>{
 	setloader(true);
 
 	if(updateFlag!==String(new Date().getDate())){
-
+		alert("Refresh to see latest matches and schedule!")
+		//https://match-predictor-app-server.vercel.app/api/matches/update-schedule
 		axios.delete("https://match-predictor-app-server.vercel.app/api/matches/update-schedule")
 		.then(()=>console.log("Schedule updated!"))
 		.catch((err)=>console.log(err))
@@ -106,6 +108,7 @@ useEffect(()=>{
 	}
 
 	// Fetch data from API
+	// https://match-predictor-app-server.vercel.app/api/matches/schedule
 	axios.get("https://match-predictor-app-server.vercel.app/api/matches/schedule")
 	.then((schedule:any)=>{
 		setmatches(schedule.data)
@@ -133,8 +136,9 @@ useEffect(()=>{
 		{searchcnt!==0?<p className='total-results' >Total results: {searchcnt}</p>:null}
 		</div>
 
-		<Spinner loader={loader} />
         {
+		loader?<Spinner loader={loader} />
+		:
 			searchcnt===0 && search!=="" && !loader ?( <h2 className='no-results' > No results found for '{search}'</h2> ):
             matches?matches.filter((match:matchData)=>{
 				//console.log(new Date(match.date).getMonth())
