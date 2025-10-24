@@ -4,6 +4,8 @@ const router=express.Router();
 let Match=require('../models/Match')
 var request = require('request-promise'); 
 
+const enableScraping = process.env.ENABLE_SCRAPING || false;
+
 
 const fetchNewMatches=async(array,requestBody)=>{
     let resposeAr=[]
@@ -11,7 +13,7 @@ const fetchNewMatches=async(array,requestBody)=>{
 		method: 'GET',  
 
 		// http:flaskserverurl:port/route 
-		uri: `${process.env.PythonURL}/schedule`,
+		uri: `${process.env.PYTHON_URL}/schedule`,
         body:requestBody,
         json:true
 
@@ -44,7 +46,7 @@ const predictMatch=async(match)=>{
 		method: 'POST',  
 
 		// http:flaskserverurl:port/route 
-		uri: `${process.env.PythonURL}/predict`,
+		uri: `${process.env.PYTHON_URL}/predict`,
         body:match,
         json:true
 
@@ -78,7 +80,7 @@ router.get('/schedule', async (req,res)=>{
         let prevSchedule=await Match.find().sort({'date': 1})
         //.sort({'date': -1}) //get all matches and sort by date in desc
      
-        if(!prevSchedule || prevSchedule.length==0){
+        if((!prevSchedule || prevSchedule.length==0) && enableScraping){
             prevSchedule=await fetchNewMatches(prevSchedule,{})
            //console.log(prevSchedule[0])
 
@@ -117,6 +119,12 @@ router.post("/predictions", async(req,res)=>{
 })
 
 router.delete("/update-schedule",async(req,res)=>{
+
+    if(!enableScraping)
+    {
+       return res.status(200).send("Schedule not updated, Scraping disabled!");
+    }
+
     try{
         
         var dates=new Date()

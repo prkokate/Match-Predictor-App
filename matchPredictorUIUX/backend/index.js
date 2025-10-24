@@ -13,7 +13,7 @@ const swaggerDocument = require('./swagger-output.json');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors({
-  origin:["https://match-predictor-app.vercel.app"],
+  origin:[process.env.APP_URL],
   methods:["POST","GET","PUT","DELETE"],
   credentials:true
 }));

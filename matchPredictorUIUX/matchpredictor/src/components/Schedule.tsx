@@ -36,14 +36,15 @@ const [searchcnt,setsearchcnt]=useState(0);
 const [curmonth,setmonth]=useState(new Date().getMonth());
 const [loader,setloader]=useState(true);
 
-    const navigate= useNavigate();
-;
+const navigate= useNavigate();
+
 	const {setMatchResult}:any=useContext(PredictionContext);
-	const predict=(match:any)=>{
+
+	async function predict(match:any){
 		match.date=String(match.date).slice(0,10);
 		setloader(true)
 		//https://match-predictor-app-server.vercel.app/
-		axios.post('https://match-predictor-app-server.vercel.app/api/matches/predictions',match
+		axios.post(`${import.meta.env.VITE_SERVER_URL}/api/matches/predictions`,match
 	).then((result:any)=>{
 	  console.log(result.data)
 
@@ -72,7 +73,7 @@ const [loader,setloader]=useState(true);
 
  
 
-const handleChange=(e:any)=>{
+function handleChange(e:any){
 	setsearch(e.target.value);
 	let temp=matches.filter((match:matchData)=>{				
 		return e.target.value!==""?match.team.toLowerCase().includes(e.target.value.toLocaleLowerCase()):match
@@ -98,9 +99,9 @@ useEffect(()=>{
 
 	if(updateFlag!==String(new Date().getDate())){
 		alert("Refresh to see latest matches and schedule!")
-		//https://match-predictor-app-server.vercel.app/api/matches/update-schedule
-		axios.delete("https://match-predictor-app-server.vercel.app/api/matches/update-schedule")
-		.then(()=>console.log("Schedule updated!"))
+
+		 axios.delete(`${import.meta.env.VITE_SERVER_URL}/api/matches/update-schedule`)
+		.then((response)=>console.log(response))
 		.catch((err)=>console.log(err))
 
 		setUpdateFlag(new Date().getDate());
@@ -108,8 +109,7 @@ useEffect(()=>{
 	}
 
 	// Fetch data from API
-	// https://match-predictor-app-server.vercel.app/api/matches/schedule
-	axios.get("https://match-predictor-app-server.vercel.app/api/matches/schedule")
+	axios.get(`${import.meta.env.VITE_SERVER_URL}/api/matches/schedule`)
 	.then((schedule:any)=>{
 		setmatches(schedule.data)
 		setloader(false);
